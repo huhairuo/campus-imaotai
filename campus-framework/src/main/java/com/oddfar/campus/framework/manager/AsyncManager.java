@@ -5,19 +5,13 @@ import com.oddfar.campus.common.utils.Threads;
 
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 异步任务管理器
- *
- * @author ruoyi
  */
 public class AsyncManager {
-    /**
-     * 操作延迟10毫秒
-     */
-    private final int OPERATE_DELAY_TIME = 10;
-
     /**
      * 异步操作任务调度线程池
      */
@@ -41,7 +35,12 @@ public class AsyncManager {
      * @param task 任务
      */
     public void execute(TimerTask task) {
-        executor.schedule(task, OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
+        // 生成1到10之间的随机数，作为额外的延迟时间
+        int additionalDelay = ThreadLocalRandom.current().nextInt(1, 11);
+        // 让线程休眠3秒
+        executor.schedule(task, 3, TimeUnit.SECONDS);
+        // 让线程休眠额外的随机生成的延迟时间
+        executor.schedule(task, additionalDelay, TimeUnit.SECONDS);
     }
 
     /**
